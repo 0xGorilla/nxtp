@@ -302,3 +302,66 @@ export const getDestinationTransfersByDomainAndIdsQuery = (txIdsByDestinationDom
       }
   `;
 };
+
+const orignTransferByXCalledTimestampQueryString = (prefix: string, timestamp: number) => {
+  return `${prefix}_originTransfers(where: { timestamp_gte: ${timestamp} }, orderBy: timestamp, orderDirection: desc) {${ORIGIN_TRANSFER_ENTITY}}`;
+};
+
+export const getOriginTransfersByXCalledTimestampQuery = (timestamp: number): string => {
+  const { config } = getContext();
+
+  let combinedQuery = "";
+  const domains = Object.keys(config.sources);
+  for (const domain of domains) {
+    const prefix = config.sources[domain].prefix;
+    combinedQuery += orignTransferByXCalledTimestampQueryString(prefix, timestamp);
+  }
+
+  return gql`
+    query GetOriginTransfers { 
+        ${combinedQuery}
+      }
+  `;
+};
+
+const destinationTransferByExecutedTimestampQueryString = (prefix: string, executedTimestamp: number) => {
+  return `${prefix}_destinationTransfers(where: { executedTimestamp_gte: ${executedTimestamp} }, orderBy: executedTimestamp, orderDirection: desc) {${DESTINATION_TRANSFER_ENTITY}}`;
+};
+
+export const getDestinationTransfersByXCalledTimestampQuery = (executedTimestamp: number): string => {
+  const { config } = getContext();
+
+  let combinedQuery = "";
+  const domains = Object.keys(config.sources);
+  for (const domain of domains) {
+    const prefix = config.sources[domain].prefix;
+    combinedQuery += destinationTransferByExecutedTimestampQueryString(prefix, executedTimestamp);
+  }
+
+  return gql`
+    query GetDestinationTransfers { 
+        ${combinedQuery}
+      }
+  `;
+};
+
+const destinationTransferByReconciledTimestampQueryString = (prefix: string, reconciledTimestamp: number) => {
+  return `${prefix}_destinationTransfers(where: { reconciledTimestamp_gte: ${reconciledTimestamp} }, orderBy: reconciledTimestamp, orderDirection: desc) {${DESTINATION_TRANSFER_ENTITY}}`;
+};
+
+export const getDestinationTransfersByReconciledTimestampQuery = (reconciledTimestamp: number): string => {
+  const { config } = getContext();
+
+  let combinedQuery = "";
+  const domains = Object.keys(config.sources);
+  for (const domain of domains) {
+    const prefix = config.sources[domain].prefix;
+    combinedQuery += destinationTransferByReconciledTimestampQueryString(prefix, reconciledTimestamp);
+  }
+
+  return gql`
+    query GetDestinationTransfers { 
+        ${combinedQuery}
+      }
+  `;
+};
