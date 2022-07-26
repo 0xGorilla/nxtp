@@ -81,7 +81,7 @@ The Connext architecture can be seen as a layered system, as follows:
 
 ## About NXTP
 
-**Nxtp** is a liquidity layer and a developer interface on top of the [nomad](nomad-url) optimisitic briding protocol.
+**Nxtp** is a liquidity layer and a developer interface on top of the [nomad](nomad-url) optimistic briding protocol.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -101,7 +101,7 @@ These are **important** and everyone must adhere to them:
 
 2. Every file and function should be unit tested. The scope of this codebase is very small, so it shouldn't be difficult to do this.
 
-3. Build for future hires and contributors. Every function should have a top-level comment that describes what it does, and internal comments breaking down each step. Files should have comments delineating their reponsibilities. Remember: Good code is **never surprising**.
+3. Build for future hires and contributors. Every function should have a top-level comment that describes what it does, and internal comments breaking down each step. Files should have comments delineating their responsibilities. Remember: Good code is **never surprising**.
 
 ## Core Flow of a transaction through Connext
 
@@ -126,7 +126,7 @@ Simulate the transaction (if this fails, the assumption is that this is a more "
 Post this object (a "bid") to the auctioneer.
 Note: if the router does not have enough funds for the transfer, they may also provide only part of the transfer's value, which gets split across multiple routers in the network.
 
--The sequencer collects bids from routers and allows routers 30 seconds per transfer to send bids. After this time, sequencer will select a bid randomly (selection process TBD) and submit the payload which contains the router's signature to the relayer network to be submitted to chain.
+-The sequencer collects bids from routers and allows routers 30 seconds per transfer to send bids. After this time, the sequencer will select a bid randomly (selection process TBD) and submit the payload which contains the router's signature to the relayer network to be submitted on-chain.
 
 -When a given bid is submitted to chain, the contracts will do the following:
 Check that there are enough funds available for the transaction.
@@ -151,13 +151,13 @@ Note 2: Routers will take a 30-60 minute lockup on their funds when relaying tra
   - Cache is a wrapper around all the redis based caches that are used.
   - Subrgaph contains all the code to read from the subgraph
   - TxService resiliently attempts to send transactions to chain (with retries, etc.) and is used to read and write to RPC providers, and has fallback providers if needed. Fallbacks can be defined as arrays and this way we can provide resiliency in case of failure
-  - Web3Signer is a wrapper around Web3Signer, which is a secure way of signing which does not require to include mnemonics in the app itself.
+  - Web3Signer is a wrapper around Web3Signer, which is a secure way of signing which does not require including mnemonics in the app itself.
 
 - [agents](https://github.com/connext/nxtp/tree/main/packages/agents) - Any kind of backend service that we have running
 
-  - [Cartograpber](https://github.com/connext/nxtp/tree/main/packages/agents/cartographer) is our chain indexer, which indexes from subgraph
+  - [Cartographer](https://github.com/connext/nxtp/tree/main/packages/agents/cartographer) is our chain indexer, which indexes from subgraph
   - [Lighthouse](https://github.com/connext/nxtp/tree/main/packages/agents/lighthouse) is our implementation of a Watchtower, when transfers are fulfilled using slowpath, they are not executed by a router. So they need to be executed by another agent, and that's what lighthouse does
-  - [Relayer](https://github.com/connext/nxtp/tree/main/packages/agents/relayer is an implementatino of a relayer in case we can't use Gelato
+  - [Relayer](https://github.com/connext/nxtp/tree/main/packages/agents/relayer is an implementation of a relayer in case we can't use Gelato
   - [Router](https://github.com/connext/nxtp/tree/main/packages/router) - listens for events from messaging service and subgraph, and then dispatches transactions to txService
   - [SDK](https://github.com/connext/nxtp/tree/main/packages/agents/sdk) - is a JS wrapper around the contract calls themselves and can be used by integrations
   - [Sequencer](https://github.com/connext/nxtp/tree/main/packages/agents/sequencer) - is the agent module which is in charge of sourcing bids from routers and puts fast liquidity bids onto the chain itself.
@@ -166,9 +166,9 @@ Note 2: Routers will take a 30-60 minute lockup on their funds when relaying tra
 - [deployments](https://github.com/connext/nxtp/tree/main/packages/deployments) - These are things which we deploy
   - Contracts are the contracts that we deploy and the deployment scripts
   - Subgraph is all the subgraph source code to define all the mappings and contains all the configurations to deploy to different graph hosted services or third party graph providers
-- [examples](https://github.com/connext/nxtp/tree/main/packages/examples) - these are not used in production, but contains ways to use the SDK that are illustrative of how to integrate NXTP
+- [examples](https://github.com/connext/nxtp/tree/main/packages/examples) - these are not used in production, but contain ways to use the SDK that are illustrative of how to integrate NXTP
 - [integration](https://github.com/connext/nxtp/tree/main/packages/integration) - Utilities for integration test
-- [utils](https://github.com/connext/nxtp/tree/main/packages/utils) - A catchall for different types of helper functions that are shared thoughout the different packages
+- [utils](https://github.com/connext/nxtp/tree/main/packages/utils) - A catchall for different types of helper functions that are shared throughout the different packages
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
